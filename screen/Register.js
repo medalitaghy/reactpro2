@@ -1,43 +1,50 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { auth } from '../firebase'
+import { auth, firestore ,firebase } from '../firebase'
 
-const Register = () => {
+const Login = () => {
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [phone, setPhone] = useState('')
+  const [nom, setNom ]= useState('')
 
   const navigation = useNavigation()
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.navigate("Home")
+  const ref = firebase.firestore().collection("Etudiant") ;
+  
+
+  const addEtudiant = ()=>{
+    if(email && email.length >0 && username && username.length >0 &&
+      phone && phone.length >0 && nom && nom.length >0 ){
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+        const data = {
+          email:email,
+          username:username,
+          phone:phone,
+          nom:nom,
+          createdAt:timestamp
+        };
+        ref.add(data)
+        .then(()=>{
+          setEmail("");
+          setUsername("");
+          setPhone("");
+          setNom("");
+          alert("add succssfly");
+          navigation.navigate("Home")
+        }).catch((error)=>{
+          alert(error) ; 
+        })
       }
-    })
 
-    return unsubscribe
-  }, [])
-
-  const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Registered with:', user.email);
-      })
-      .catch(error => alert(error.message))
   }
 
-  const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Logged in with:', user.email);
-      })
-      .catch(error => alert(error.message))
-  }
+  
+
+  
+
+  
 
   return (
     <KeyboardAvoidingView
@@ -45,6 +52,20 @@ const Register = () => {
       behavior="padding"
     >
       <View style={styles.inputContainer}>
+      <TextInput
+          placeholder="username"
+          value={username}
+          onChangeText={text => setUsername(text)}
+          style={styles.input}
+          
+        />
+        <TextInput
+          placeholder="nom"
+          value={nom}
+          onChangeText={text => setNom(text)}
+          style={styles.input}
+          
+        />
         <TextInput
           placeholder="Email"
           value={email}
@@ -52,33 +73,28 @@ const Register = () => {
           style={styles.input}
         />
         <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
+          placeholder="pohne"
+          value={phone}
+          onChangeText={text => setPhone(text)}
           style={styles.input}
-          secureTextEntry
         />
+        
       </View>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={handleLogin}
+          onPress={addEtudiant}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
+        
       </View>
     </KeyboardAvoidingView>
   )
 }
 
-export default Register
+export default Login
 
 const styles = StyleSheet.create({
   container: {
