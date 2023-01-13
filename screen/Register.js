@@ -23,8 +23,10 @@ const Login = () => {
           username:username,
           phone:phone,
           nom:nom,
+          userID:auth.currentUser?.uid,
           createdAt:timestamp
         };
+        
         ref.add(data)
         .then(()=>{
           setEmail("");

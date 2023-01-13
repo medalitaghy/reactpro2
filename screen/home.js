@@ -1,14 +1,14 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FlatList } from 'react-native'
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
 import { auth,firebase } from '../firebase'
+import ItemList from './ItemList'
 
 const HomeScreen = () => {
   const navigation = useNavigation()
   const [users,setUsers] = useState([])
-  const ref = firebase.firestore().collection("Etudiant") ;
+  const uid = auth.currentUser.uid ;
+  const ref = firebase.firestore().collection("Etudiant").where("userID", "==", `${uid}`)
 
   useEffect(async ()=>{
     ref.onSnapshot(
@@ -22,46 +22,20 @@ const HomeScreen = () => {
                 nom,
                 username,
                 phone,
-
               })
           })
           setUsers(users)
+          console.log(users)
       }
     )
   }, [])
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login")
-      })
-      .catch(error => alert(error.message))
-  }
+
 
   return (
     <View style={styles.container}>
-      <Text>Email: {auth.currentUser?.email}</Text>
-      <TouchableOpacity
-        onPress={handleSignOut}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Sign out</Text>
-
-      </TouchableOpacity>
-      <View style={{height:"80%", marginTop:20}}>
-      <FlatList
       
-        data={users}
-        numColumns={1}
-        renderItem = {({item})=>(
-          <Pressable>
-            <View>
-              <Text> {item.nom}</Text>
-              <Text> {item.phone}</Text>
-            </View>
-          </Pressable>
-        )}
-        />
+      <View style={{height:"80%", marginTop:20}}>
+      <ItemList items={users} />
       </View>
       
     </View>
@@ -73,8 +47,9 @@ export default HomeScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     justifyContent: 'center',
-    alignItems: 'center'
+    //alignItems: 'center'
   },
    button: {
     backgroundColor: '#0782F9',
@@ -84,9 +59,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 40,
   },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16,
-  },
+  
 })

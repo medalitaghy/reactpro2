@@ -81,6 +81,7 @@ const Login = () => {
 export default Login
 
 const styles = StyleSheet.create({
+    
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 15,
     paddingVertical: 10,
+    marginVertical:10,
     borderRadius: 10,
     marginTop: 5,
   },
