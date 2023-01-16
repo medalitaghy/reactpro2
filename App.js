@@ -2,11 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, View,Button} from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import Icon from 'react-native-vector-icons/Ionicons'
-
-import Home from './screen/Home';
-import Parameter from './screen/parameter';
-import Register from './screen/Register';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screen/Login';
@@ -22,10 +17,9 @@ export default function App() {
   return (
       <NavigationContainer  >
         <Stack.Navigator >
-<Stack.Screen name="Login" component={Login} options={{headerShown:false}}
-              />
-  <Stack.Screen name="Route" component={Route} options={{headerShown:false}}
-              />
+
+  <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
+  <Stack.Screen name="Route" component={Route} options={{headerShown:false}} />
    
       </Stack.Navigator>
 

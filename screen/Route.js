@@ -3,16 +3,27 @@ import { StyleSheet, Text, View,Button} from 'react-native';
 import { NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import Icon from 'react-native-vector-icons/Ionicons'
-
-import Parameter from './parameter';
-import Login from './Login';
-import Home from './Home';
 import { createStackNavigator } from '@react-navigation/stack';
+import Parameter from './parameter';
+import Update from './Update';
+
 import Register from './Register';
+import HomeScreen from './Home';
+const Stack = createStackNavigator() ;
 
+function RouteHome(){
+  return(
+   <Stack.Navigator initialRouteName='HomeScreen' >
+     <Stack.Screen name='HomeScreen' component={HomeScreen} options={{headerShown:false}}/>
+     <Stack.Screen name='Update' component={Update} options={{headerShown:false}} />
+   </Stack.Navigator>
+  )
+ 
+  }
 
-export default function HomeRoute() {
-    const navigation = useNavigation();
+export default function Route() {
+
+  
     const tab = createBottomTabNavigator() ;
     return(
       
@@ -20,7 +31,7 @@ export default function HomeRoute() {
             screenOptions={({route}) =>({
               tabBarIcon :({focused,color,size}) => {
                 let iconName  ;
-                if(route.name == "Home"){
+                if(route.name == "RouteHome"){
                   iconName = focused? "home":"home-outline" ;
               }else if(route.name == "Parameter"){
                 iconName = focused? "settings": "settings-outline" ;
@@ -35,7 +46,7 @@ export default function HomeRoute() {
             tabBarShowLabel:false 
             }) }
             >
-            <tab.Screen name="Home" component={Home}/>
+            <tab.Screen name="RouteHome" component={RouteHome}/>
             <tab.Screen name="Login" component={Register}/>
             
             <tab.Screen name="Parameter" component={Parameter} />

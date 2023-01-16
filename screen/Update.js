@@ -1,9 +1,10 @@
-import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { auth, firestore ,firebase } from '../firebase'
+import {  useNavigation} from '@react-navigation/native';
 
-const Register = () => {
+const Update = ({id}) => {
+
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [phone, setPhone] = useState('')
@@ -11,9 +12,6 @@ const Register = () => {
 
   const navigation = useNavigation()
 
-  const ref = firebase.firestore().collection("Etudiant") ;
-  const doc = firebase.firestore().collection("Etudiant").doc() ;
-  
 
   const addEtudiant = ()=>{
     if(email && email.length >0 && username && username.length >0 &&
@@ -24,10 +22,10 @@ const Register = () => {
           username:username,
           phone:phone,
           nom:nom,
-          idDoc:doc.id,
           userID:auth.currentUser?.uid,
           createdAt:timestamp
         };
+
         ref.add(data)
         .then(()=>{
           setEmail("");
@@ -35,17 +33,13 @@ const Register = () => {
           setPhone("");
           setNom("");
           alert("add succssfly");
-          navigation.navigate("RouteHome")
+          navigation.navigate("Home")
         }).catch((error)=>{
           alert(error) ; 
         })
       }
 
   }
-
-  
-
-  
 
   
 
@@ -89,7 +83,7 @@ const Register = () => {
           onPress={addEtudiant}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Add</Text>
+          <Text style={styles.buttonText}>Update</Text>
         </TouchableOpacity>
         
       </View>
@@ -97,7 +91,7 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Update
 
 const styles = StyleSheet.create({
   container: {

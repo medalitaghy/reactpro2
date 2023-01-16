@@ -19,7 +19,7 @@ export default function Parameter(){
         <Text>Parameter </Text> 
         <Button
         title="allez aux Accuille"
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('RouteHome')}
       />
       <View style={styles.subcontainer} >
       <Text>Email: {auth.currentUser?.email}</Text>

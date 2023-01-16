@@ -1,45 +1,53 @@
+import { useNavigation } from '@react-navigation/native';
 import { FlatList, StyleSheet, Text, View ,TouchableOpacity} from 'react-native';
 import { firebase } from '../firebase';
 
 
-const Item = ({ nom ,id}) => (
+function Item ({ nom ,id}) {
+const nav = useNavigation(); 
+
+return(
   <View style={styles.item}>
-    <Text style={styles.title}>{nom}</Text >
+  <Text style={styles.title}>{nom}</Text >
+  <TouchableOpacity
+     onPress={() => {
+      nav.navigate("Update")
+     } }
+      style={styles.button}
+    >
+      <Text style={styles.buttonText}>update</Text>
+
+    </TouchableOpacity>
     <TouchableOpacity
-       // onPress={() => handleDelete(id)}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>update</Text>
+      onPress={ async()=>{
+          const ref = await firebase.firestore().collection('Etudiant').doc(id).delete()
+          ref.then(()=>{
+                alert("delete succssfly");
+                //navigation.navigate("Home")
+              }).catch((error)=>{
+                alert(error) ; 
+              })
+      }
+      }
+      style={styles.button}
+    >
+      <Text style={styles.buttonText}>delete</Text>
 
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={ async()=>{
-            const ref = await firebase.firestore().collection('Etudiant').doc(id).delete()
-            ref.then(()=>{
-                  alert("delete succssfly");
-                  //navigation.navigate("Home")
-                }).catch((error)=>{
-                  alert(error) ; 
-                })
-        }
-        }
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>delete</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      onPress={ async()=>{
+         
+      }
+      }
+      style={styles.button}
+    >
+      <Text style={styles.buttonText}>details</Text>
 
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={ async()=>{
-           
-        }
-        }
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>details</Text>
-
-      </TouchableOpacity>
-  </View>
-);
+    </TouchableOpacity>
+</View>
+)
+ 
+}
 
 const ItemList = ({ items }) => {
   return (
